@@ -20,7 +20,7 @@
             overflow-x: hidden;
         }
 
-        /* Эффект плавающих лепестков на фоне */
+        /* Эффект плавающих ЗЕЛЁНЫХ ЛИСТЬЕВ */
         #petals-container {
             position: fixed;
             top: 0;
@@ -31,20 +31,21 @@
             z-index: 1;
         }
 
-        .petal {
+        .leaf {
             position: absolute;
-            background: radial-gradient(circle at 30% 30%, #ffdab9, #ffb6c1);
-            width: 20px;
-            height: 20px;
+            background: radial-gradient(circle at 30% 30%, #6b8e23, #228b22);
+            width: 22px;
+            height: 22px;
             border-radius: 100% 0 100% 0;
-            opacity: 0.6;
-            filter: blur(1px);
-            animation: floatPetal 15s infinite linear;
+            opacity: 0.55;
+            filter: blur(0.8px);
+            animation: floatLeaf 16s infinite linear;
+            box-shadow: 0 0 5px rgba(34, 139, 34, 0.3);
         }
 
-        @keyframes floatPetal {
+        @keyframes floatLeaf {
             0% { transform: translateY(100vh) rotate(0deg); opacity: 0; }
-            10% { opacity: 0.7; }
+            10% { opacity: 0.65; }
             90% { opacity: 0.5; }
             100% { transform: translateY(-100vh) rotate(360deg); opacity: 0; }
         }
@@ -221,58 +222,88 @@
             font-size: 1.2rem;
         }
 
-        /* Галерея */
-        .gallery-title {
+        /* НОВЫЙ БЛОК: КАРТОЧКИ С ПОЖЕЛАНИЯМИ (вместо галереи) */
+        .cards-title {
             text-align: center;
             font-size: 2.5rem;
             margin-bottom: 40px;
             font-family: 'Cormorant Garamond', serif;
         }
 
-        .gallery-grid {
+        .cards-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
             gap: 30px;
         }
 
-        .polaroid {
-            background: white;
-            padding: 15px 15px 40px 15px;
-            box-shadow: 15px 15px 30px rgba(0,0,0,0.1), -5px -5px 15px #fff, inset 0 0 0 1px #f0e0ce;
-            border-radius: 8px 8px 4px 4px;
-            transform: rotate(0deg);
-            transition: transform 0.4s cubic-bezier(0.2, 0.9, 0.4, 1), box-shadow 0.4s;
-            text-align: center;
-        }
-
-        .polaroid:nth-child(odd) { transform: rotate(-1deg); }
-        .polaroid:nth-child(even) { transform: rotate(2deg); }
-        .polaroid:hover {
-            transform: scale(1.03) rotate(0deg);
-            box-shadow: 25px 25px 40px rgba(0,0,0,0.15);
-            z-index: 5;
-        }
-
-        .polaroid-img {
+        .flip-card {
+            background-color: transparent;
             width: 100%;
-            height: 220px;
-            background: linear-gradient(145deg, #d4c4b0, #e6d5c0);
-            border-radius: 4px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: #5a4a3a;
-            font-weight: 600;
-            box-shadow: inset 0 0 15px rgba(0,0,0,0.05);
-            background-size: cover;
-            background-position: center;
+            height: 280px;
+            perspective: 1500px;
+            cursor: pointer;
         }
 
-        .polaroid-caption {
-            margin-top: 20px;
-            font-style: italic;
-            font-weight: 500;
-            color: #4a3b2c;
+        .flip-card-inner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            text-align: center;
+            transition: transform 0.7s cubic-bezier(0.23, 1, 0.32, 1);
+            transform-style: preserve-3d;
+            border-radius: 30px;
+            box-shadow: 15px 15px 30px rgba(0,0,0,0.08);
+        }
+
+        .flip-card:hover .flip-card-inner {
+            transform: rotateY(180deg);
+        }
+
+        .flip-card-front, .flip-card-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            -webkit-backface-visibility: hidden;
+            backface-visibility: hidden;
+            border-radius: 30px;
+            padding: 30px 20px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            background: #fff9f0;
+            border: 1px solid #ffe6a6;
+            box-shadow: inset 0 0 20px #fff3e0;
+        }
+
+        .flip-card-front {
+            background: linear-gradient(145deg, #ffffff, #fdf5e6);
+            color: #3a2c1b;
+        }
+
+        .flip-card-back {
+            background: linear-gradient(145deg, #f5e6d3, #faead7);
+            color: #2e241a;
+            transform: rotateY(180deg);
+            border: 1px solid #d4af37;
+        }
+
+        .card-icon {
+            font-size: 3.5rem;
+            margin-bottom: 20px;
+        }
+
+        .card-title {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 2rem;
+            font-weight: 700;
+            color: #8b6b4a;
+            margin-bottom: 10px;
+        }
+
+        .card-text {
+            font-size: 1.1rem;
+            line-height: 1.5;
         }
 
         /* Блок с тостом */
@@ -319,7 +350,7 @@
         /* Адаптив */
         @media (max-width: 700px) {
             h1 { font-size: 3.5rem; }
-            .gallery-grid { grid-template-columns: 1fr; }
+            .cards-grid { grid-template-columns: 1fr; }
             .timeline-item { flex-direction: column; align-items: flex-start; border-radius: 30px; }
             #wish-text { font-size: 1.8rem; }
         }
@@ -327,7 +358,7 @@
 </head>
 <body>
 
-<!-- Летающие лепестки (динамически добавим через JS) -->
+<!-- Падающие ЗЕЛЁНЫЕ ЛИСТЬЯ -->
 <div id="petals-container"></div>
 
 <div class="wrapper">
@@ -358,21 +389,48 @@
         </div>
     </section>
 
-    <!-- Галерея воспоминаний (вместо картинок – красивые узоры, можно заменить фото) -->
+    <!-- НОВЫЙ БЛОК: ПОЖЕЛАНИЯ ОТ СЕРДЦА (карточки с переворотом) -->
     <section>
-        <h2 class="gallery-title">📸 Воспоминания в сердце 📸</h2>
-        <div class="gallery-grid">
-            <div class="polaroid">
-                <div class="polaroid-img" style="background-image: url('data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 100 100\'%3E%3Ccircle cx=\'50\' cy=\'40\' r=\'20\' fill=\'%23d4af37\' opacity=\'0.3\'/%3E%3Cpath d=\'M30 80 L70 80 L60 60 L40 60 Z\' fill=\'%23b68d6a\' opacity=\'0.3\'/%3E%3C/svg%3E'), linear-gradient(145deg, #f3e9de, #e6d9ca); background-size: 80px, cover;"></div>
-                <div class="polaroid-caption">Твоя улыбка — солнце</div>
+        <h2 class="cards-title">💚 Пожелания от сердца 💚</h2>
+        <div class="cards-grid">
+            <!-- Карточка 1 -->
+            <div class="flip-card">
+                <div class="flip-card-inner">
+                    <div class="flip-card-front">
+                        <div class="card-icon">🌸</div>
+                        <div class="card-title">Нежность</div>
+                        <div class="card-text">Наведи, чтобы открыть</div>
+                    </div>
+                    <div class="flip-card-back">
+                        <div class="card-text">Пусть каждый твой день будет наполнен заботой, уютом и нежностью близких. Ты этого достойна как никто другой.</div>
+                    </div>
+                </div>
             </div>
-            <div class="polaroid">
-                <div class="polaroid-img" style="background-image: url('data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 100 100\'%3E%3Crect x=\'20\' y=\'30\' width=\'60\' height=\'40\' fill=\'%23d4af37\' opacity=\'0.2\'/%3E%3Ccircle cx=\'50\' cy=\'25\' r=\'10\' fill=\'%238b6b4a\' opacity=\'0.2\'/%3E%3C/svg%3E'), linear-gradient(145deg, #e9dacb, #d6c4b2); background-size: 80px, cover;"></div>
-                <div class="polaroid-caption">Уют твоих пирогов</div>
+            <!-- Карточка 2 -->
+            <div class="flip-card">
+                <div class="flip-card-inner">
+                    <div class="flip-card-front">
+                        <div class="card-icon">☀️</div>
+                        <div class="card-title">Бодрость</div>
+                        <div class="card-text">Наведи, чтобы открыть</div>
+                    </div>
+                    <div class="flip-card-back">
+                        <div class="card-text">В 73 года жизнь только играет яркими красками! Желаю тебе энергии, лёгкости и желания радоваться мелочам.</div>
+                    </div>
+                </div>
             </div>
-            <div class="polaroid">
-                <div class="polaroid-img" style="background-image: url('data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 100 100\'%3E%3Cpath d=\'M20 60 L50 30 L80 60 L70 80 L30 80 Z\' fill=\'%23d4af37\' opacity=\'0.2\'/%3E%3C/svg%3E'), linear-gradient(145deg, #efe3d6, #dacbbc); background-size: 80px, cover;"></div>
-                <div class="polaroid-caption">Счастье быть рядом</div>
+            <!-- Карточка 3 -->
+            <div class="flip-card">
+                <div class="flip-card-inner">
+                    <div class="flip-card-front">
+                        <div class="card-icon">💖</div>
+                        <div class="card-title">Любовь</div>
+                        <div class="card-text">Наведи, чтобы открыть</div>
+                    </div>
+                    <div class="flip-card-back">
+                        <div class="card-text">Ты — сердце нашей семьи. Пусть оно бьётся ровно и спокойно, согретое нашей бесконечной любовью и благодарностью.</div>
+                    </div>
+                </div>
             </div>
         </div>
     </section>
@@ -396,22 +454,24 @@
 
 <script>
     (function(){
-        // 1. ГЕНЕРАЦИЯ ЛЕПЕСТКОВ
+        // 1. ГЕНЕРАЦИЯ ЗЕЛЁНЫХ ЛИСТЬЕВ
         const petalsContainer = document.getElementById('petals-container');
-        for (let i = 0; i < 40; i++) {
-            const petal = document.createElement('div');
-            petal.classList.add('petal');
-            const size = 8 + Math.random() * 25;
-            petal.style.width = size + 'px';
-            petal.style.height = size + 'px';
-            petal.style.left = Math.random() * 100 + '%';
-            petal.style.animationDelay = Math.random() * 15 + 's';
-            petal.style.animationDuration = (10 + Math.random() * 20) + 's';
-            petal.style.background = `radial-gradient(circle at 30% 30%, ${['#ffe0b2','#ffccbc','#fff0d4','#f8d5aa'][Math.floor(Math.random()*4)]}, #e6b999)`;
-            petalsContainer.appendChild(petal);
+        for (let i = 0; i < 45; i++) {
+            const leaf = document.createElement('div');
+            leaf.classList.add('leaf');
+            const size = 10 + Math.random() * 20;
+            leaf.style.width = size + 'px';
+            leaf.style.height = size + 'px';
+            leaf.style.left = Math.random() * 100 + '%';
+            leaf.style.animationDelay = Math.random() * 15 + 's';
+            leaf.style.animationDuration = (12 + Math.random() * 18) + 's';
+            // разные оттенки зелёного
+            const colors = ['#4caf50', '#388e3c', '#2e7d32', '#8bc34a', '#558b2f'];
+            leaf.style.background = `radial-gradient(circle at 30% 30%, ${colors[Math.floor(Math.random()*colors.length)]}, #1b5e20)`;
+            petalsContainer.appendChild(leaf);
         }
 
-        // 2. РАНДОМАЙЗЕР ПОЖЕЛАНИЙ (тот самый функционал)
+        // 2. РАНДОМАЙЗЕР ПОЖЕЛАНИЙ
         const wishes = [
             "💐 Здоровья богатырского и бодрости на 100 лет!",
             "🌸 Пусть каждый день будет как цветущий сад — полон ароматов счастья.",
@@ -442,7 +502,7 @@
             let newWish;
             do {
                 newWish = wishes[Math.floor(Math.random() * wishes.length)];
-            } while (newWish === wishTextEl.textContent && wishes.length > 1); // чтобы не повторялось подряд
+            } while (newWish === wishTextEl.textContent && wishes.length > 1);
             wishTextEl.style.opacity = '0';
             setTimeout(() => {
                 wishTextEl.textContent = newWish;
@@ -452,15 +512,14 @@
 
         btn.addEventListener('click', setRandomWish);
 
-        // 3. ЭФФЕКТ САЛЮТА (при наведении на блок)
+        // 3. ЭФФЕКТ САЛЮТА
         const fireBlock = document.getElementById('firework-block');
         fireBlock.addEventListener('mouseenter', () => {
-            fireBlock.innerHTML = '🎇✨ С ДНЁМ РОЖДЕНИЯ! ✨🎇';
+            fireBlock.innerHTML = '🎇✨ С ДНЁМ РОЖДЕНИЯ, БАБУШКА! ✨🎇';
             fireBlock.style.transform = 'scale(1.02)';
             fireBlock.style.transition = '0.2s';
-            // добавим микро-салют из конфетти? Ограничимся текстом, чтобы не грузить, но создадим эффект.
             const originalBg = fireBlock.style.background;
-            fireBlock.style.background = 'radial-gradient(circle, #ffd70030, #fff0d0)';
+            fireBlock.style.background = 'radial-gradient(circle, #ffd70040, #fff0d0)';
             setTimeout(() => fireBlock.style.background = originalBg, 300);
         });
         fireBlock.addEventListener('mouseleave', () => {
@@ -468,15 +527,14 @@
             fireBlock.style.transform = 'scale(1)';
         });
 
-       
+        // 4. АНИМАЦИЯ ЗНАЧКА ВОЗРАСТА
         const badge = document.querySelector('.age-badge');
         setInterval(() => {
             badge.style.transform = 'scale(1.05)';
             setTimeout(() => badge.style.transform = 'scale(1)', 150);
         }, 4000);
         
-        // И маленький сюрприз: в консоли тоже поздравление
-        console.log('%c💖 С 73-летием, Бабушка! 💖', 'font-size: 20px; background: #d4af37; color: #1e1e1e; padding: 8px; border-radius: 20px;');
+        console.log('%c💚 С 73-летием, Бабушка! 💚', 'font-size: 20px; background: #228b22; color: #fff; padding: 8px; border-radius: 20px;');
     })();
 </script>
 
